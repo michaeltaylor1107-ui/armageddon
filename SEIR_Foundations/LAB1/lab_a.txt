@@ -51,5 +51,20 @@ Security group for EC2 (sg-ec2-lab)
 Now go back to RDS SG inbound rule
 Set Source = sg-ec2-lab for TCP 3306.
 
+Part 3 — Store DB creds (Secrets Manager)
+  1) Secrets Manager → Store a new secret
+  2) Secret type: Credentials for RDS database
+  3) Username/password: admin + your password
+  4) Select your RDS instance lab-mysql
+  5) Secret name: lab/rds/mysql
 
+Create an IAM Role for EC2 to read the secret
+  1) IAM → Roles → Create role
+  2) Trusted entity: EC2
+  3) Add permission policy (tightest good enough for lab):
+      SecretsManagerReadWrite is too broad (but easy).
+      Better: create a small inline policy like below.
 
+Inline policy (recommended)
+Replace <REGION>, <ACCOUNT_ID>, and secret name if different:
+#Check inline_policy.json in this folder 
